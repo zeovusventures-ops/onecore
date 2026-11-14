@@ -185,6 +185,9 @@ export default function Footer() {
             <Link to="/disclaimer" className="hover:text-white hover:underline underline-offset-4 transition-colors">
               Terms of Use
             </Link>
+            <Link to="/sitemap" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+              Sitemap
+            </Link>
             <Link to="/contact" className="hover:text-white hover:underline underline-offset-4 transition-colors">
               Accessibility
             </Link>

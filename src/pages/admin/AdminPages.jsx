@@ -22,6 +22,7 @@ const DEFAULT_PAGES = [
   { id: 55, page_key: 'partnerships', title: 'Distribution & Partnerships', route: '/partnerships', meta_description: 'Distribution network and franchise partner criteria.', section_count: 4 },
   { id: 56, page_key: 'privacy', title: 'Privacy Statement', route: '/privacy', meta_description: 'Information collection, usage, and data protection policies.', section_count: 4 },
   { id: 57, page_key: 'disclaimer', title: 'Terms of Use & Disclaimer', route: '/disclaimer', meta_description: 'Medical information notice, regulatory boundaries, and website terms.', section_count: 3 },
+  { id: 58, page_key: 'sitemap', title: 'Site Map & Directory', route: '/sitemap', meta_description: 'Complete platform architecture, division index, and page directory.', section_count: 2 },
 ];
 
 export default function AdminPages() {

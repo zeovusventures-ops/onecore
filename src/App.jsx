@@ -26,6 +26,7 @@ import Contact from './pages/Contact';
 import DistributionPartnerships from './pages/DistributionPartnerships';
 import Privacy from './pages/Privacy';
 import Disclaimer from './pages/Disclaimer';
+import Sitemap from './pages/Sitemap';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -242,6 +243,7 @@ function PublicRoutes() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/sitemap" element={<Sitemap />} />
 
             {/* Section anchor fallbacks */}
             <Route path="/principles" element={<Navigate to="/quality-manufacturing#principles" replace />} />
@@ -250,6 +252,9 @@ function PublicRoutes() {
             <Route path="/contact-details" element={<Navigate to="/contact#contact-details" replace />} />
             <Route path="/for-patients" element={<Navigate to="/patients-caregivers#for-patients" replace />} />
             <Route path="/for-professionals" element={<Navigate to="/patients-caregivers#for-professionals" replace />} />
+            <Route path="/healthcare-professionals" element={<Navigate to="/patients-caregivers#for-professionals" replace />} />
+            <Route path="/careers" element={<Navigate to="/about" replace />} />
+            <Route path="/research-quality" element={<Navigate to="/quality-manufacturing" replace />} />
             <Route path="/patient-safety" element={<Navigate to="/patients-caregivers#patient-safety" replace />} />
 
             <Route path="*" element={<NotFound />} />

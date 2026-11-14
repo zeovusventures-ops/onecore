@@ -1087,6 +1087,54 @@ function SectionEditorPanel({ section, onSave, onCancel, onOpenMedia }) {
   );
 }
 
+const CANONICAL_SECTION_ALIASES = {
+  hero_banner: 'hero',
+  about_hero: 'hero',
+  quality_hero: 'hero',
+  patients_hero: 'hero',
+  contact_hero: 'hero',
+  hcp_hero: 'hero',
+  news_hero: 'hero',
+  portfolio_header: 'hero',
+  careers_hero: 'hero',
+  divisions_showcase: 'areas_of_care',
+  division_tabs_section: 'areas_of_care',
+  corporate_mission: 'mission_vision',
+  about_overview: 'about_onecore',
+  quality_promise: 'quality_assurance',
+  quality_highlight: 'quality_assurance',
+  contact_info_cards: 'direct_channels',
+  contact_form_settings: 'form_intro',
+  enquiry_types: 'partnerships_section',
+  guidance_cards: 'for_patients',
+  patient_guidance_cards: 'for_patients',
+  clinical_resources: 'for_professionals',
+};
+
+function deduplicateSections(secList) {
+  if (!Array.isArray(secList)) return [];
+  const seen = new Map();
+  const result = [];
+  for (const s of secList) {
+    const rawKey = (s.section_key || '').trim().toLowerCase();
+    const canonical = CANONICAL_SECTION_ALIASES[rawKey] || rawKey;
+    if (!seen.has(canonical)) {
+      seen.set(canonical, s);
+      result.push(s);
+    } else {
+      const existing = seen.get(canonical);
+      const existingScore = (existing.items_json ? 2 : 0) + (existing.image_url ? 1 : 0) + (existing.body ? 1 : 0);
+      const newScore = (s.items_json ? 2 : 0) + (s.image_url ? 1 : 0) + (s.body ? 1 : 0);
+      if (newScore > existingScore || (newScore === existingScore && s.id > existing.id)) {
+        const idx = result.indexOf(existing);
+        if (idx !== -1) result[idx] = s;
+        seen.set(canonical, s);
+      }
+    }
+  }
+  return result;
+}
+
 // ─── Main AdminPageEditor Component ───────────────────────────────────────────
 export default function AdminPageEditor() {
   const { pageKey } = useParams();
@@ -1131,7 +1179,7 @@ export default function AdminPageEditor() {
         const data = await res.json();
         if (data.success && data.data) {
           setPage(data.data);
-          setSections(data.data.sections || []);
+          setSections(deduplicateSections(data.data.sections || []));
         } else {
           showToast('error', 'Page not found.');
         }
