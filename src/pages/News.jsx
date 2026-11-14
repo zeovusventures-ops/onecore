@@ -57,8 +57,21 @@ export default function News() {
         <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
           <ScrollReveal>
             <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
-              News & <br />
-              <span className="italic font-normal text-[#D52B1E]">Clinical Perspectives.</span>
+              {heroSec.title ? (
+                heroSec.title.includes('\n') ? (
+                  <>
+                    {heroSec.title.split('\n')[0]} <br />
+                    <span className="italic font-normal text-[#D52B1E]">{heroSec.title.split('\n').slice(1).join(' ')}</span>
+                  </>
+                ) : (
+                  heroSec.title
+                )
+              ) : (
+                <>
+                  News & <br />
+                  <span className="italic font-normal text-[#D52B1E]">Clinical Perspectives.</span>
+                </>
+              )}
             </h1>
           </ScrollReveal>
 

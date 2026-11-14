@@ -115,10 +115,19 @@ export default function About() {
 
   const foundationParagraphs = (foundationSec.body || '').split('\n\n').filter(Boolean);
 
-  // Filter out any extra items so there are STRICTLY the 2 authentic client cards
-  const authenticVisionMission = (visionMissionSec.items || []).filter(
-    (item) => item.title && !item.title.toLowerCase().includes('purpose')
-  ).slice(0, 2);
+  // Dynamic Vision & Mission items from CMS, falling back to authentic brand cards
+  const authenticVisionMission = (visionMissionSec.items && visionMissionSec.items.length > 0)
+    ? visionMissionSec.items
+    : [
+        {
+          title: 'Our Vision',
+          desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.',
+        },
+        {
+          title: 'Our Mission',
+          desc: 'To improve lives by delivering high-quality, scientifically sound healthcare products that address everyday medical challenges and meet the needs of doctors and patients.',
+        },
+      ];
 
   if (cmsLoading && !cmsError) {
     return <PageSkeleton />;
@@ -150,8 +159,21 @@ export default function About() {
         <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
           <ScrollReveal>
             <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
-              Built around clinical reality. <br />
-              <span className="italic font-normal text-[#D52B1E]">Guided by patient trust.</span>
+              {heroSec.title ? (
+                heroSec.title.includes('\n') ? (
+                  <>
+                    {heroSec.title.split('\n')[0]} <br />
+                    <span className="italic font-normal text-[#D52B1E]">{heroSec.title.split('\n').slice(1).join(' ')}</span>
+                  </>
+                ) : (
+                  heroSec.title
+                )
+              ) : (
+                <>
+                  Built around clinical reality. <br />
+                  <span className="italic font-normal text-[#D52B1E]">Guided by patient trust.</span>
+                </>
+              )}
             </h1>
           </ScrollReveal>
 
@@ -171,7 +193,7 @@ export default function About() {
         <div className="space-y-6">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight">
-              Vision & Mission
+              {visionMissionSec.title || 'Vision & Mission'}
             </h2>
           </div>
 
@@ -402,7 +424,20 @@ export default function About() {
       <section className="py-12 sm:py-16 bg-[#121212] text-white text-center">
         <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-6">
           <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight text-balance">
-            Explore our therapeutic specialties <br className="hidden sm:inline" />and quality disciplines.
+            {finalCtaSec.title ? (
+              finalCtaSec.title.includes('\n') ? (
+                <>
+                  {finalCtaSec.title.split('\n')[0]} <br className="hidden sm:inline" />
+                  {finalCtaSec.title.split('\n').slice(1).join(' ')}
+                </>
+              ) : (
+                finalCtaSec.title
+              )
+            ) : (
+              <>
+                Explore our therapeutic specialties <br className="hidden sm:inline" />and quality disciplines.
+              </>
+            )}
           </h2>
           <p className="text-base sm:text-lg text-stone-300 max-w-2xl mx-auto font-light leading-relaxed">
             {finalCtaSec.body || 'Discover how our formulations serve diverse clinical disciplines with dependable consistency and uncompromising standards.'}

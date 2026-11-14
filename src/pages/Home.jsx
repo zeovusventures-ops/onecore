@@ -270,77 +270,71 @@ export default function Home() {
             <div className="max-w-4xl mx-auto text-center">
               <ScrollReveal>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.12] pt-2 text-balance">
-                  Healthcare is personal. <br className="hidden sm:inline" /><em className="lilly-serif-italic font-normal text-[#121212]">Our approach should be too.</em>
+                  {aboutSec.title ? (
+                    aboutSec.title.includes('\n') ? (
+                      <>
+                        {aboutSec.title.split('\n')[0]} <br className="hidden sm:inline" />
+                        <em className="lilly-serif-italic font-normal text-[#121212]">
+                          {aboutSec.title.split('\n').slice(1).join(' ')}
+                        </em>
+                      </>
+                    ) : (
+                      aboutSec.title
+                    )
+                  ) : (
+                    <>
+                      Healthcare is personal. <br className="hidden sm:inline" />
+                      <em className="lilly-serif-italic font-normal text-[#121212]">
+                        Our approach should be too.
+                      </em>
+                    </>
+                  )}
                 </h2>
               </ScrollReveal>
             </div>
 
-            {/* 3 Editorial Pillars (Pure typography, no fake icon boxes) */}
+            {/* 3 Editorial Pillars */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 pt-4">
-
-              {/* Pillar 1 */}
-              <ScrollReveal delay={0.1}>
-                <div className="flex flex-col h-full space-y-4 p-2 border-t border-stone-200 pt-6">
-                  <h3 className="text-2xl font-serif font-medium text-[#121212] tracking-tight">
-                    Purposeful Formulations
-                  </h3>
-                  <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed flex-1">
-                    Developed to address real clinical needs across 9 specialized disciplines, offering healthcare professionals dependable choices.
-                  </p>
-                  <div className="pt-2">
-                    <Link
-                      to="/areas-of-care"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-all duration-200 group"
-                    >
-                      <span>Explore Formulations</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
+              {(aboutSec.items && aboutSec.items.length >= 3 ? aboutSec.items : [
+                {
+                  title: 'Purposeful Formulations',
+                  desc: 'Developed to address real clinical needs across 9 specialized disciplines, offering healthcare professionals dependable choices.',
+                  cta_text: 'Explore Formulations',
+                  cta_url: '/areas-of-care',
+                },
+                {
+                  title: 'Dependable Quality',
+                  desc: 'Quality is considered across manufacturing, testing, review and release — never treated as a mere final checkpoint.',
+                  cta_text: 'View Quality Standards',
+                  cta_url: '/quality-manufacturing',
+                },
+                {
+                  title: 'Patient & Doctor Focus',
+                  desc: 'Staying close to everyday clinical practice and patients’ daily realities to ensure treatments remain accessible and effective.',
+                  cta_text: 'Discover Onecore',
+                  cta_url: '/about',
+                },
+              ]).map((pillar, pIdx) => (
+                <ScrollReveal key={pillar.title || pIdx} delay={0.1 + pIdx * 0.05}>
+                  <div className="flex flex-col h-full space-y-4 p-2 border-t border-stone-200 pt-6">
+                    <h3 className="text-2xl font-serif font-medium text-[#121212] tracking-tight">
+                      {pillar.title}
+                    </h3>
+                    <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed flex-1">
+                      {pillar.desc || pillar.description || pillar.text || pillar.body}
+                    </p>
+                    <div className="pt-2">
+                      <Link
+                        to={pillar.cta_url || (pIdx === 0 ? '/areas-of-care' : pIdx === 1 ? '/quality-manufacturing' : '/about')}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-all duration-200 group"
+                      >
+                        <span>{pillar.cta_text || (pIdx === 0 ? 'Explore Formulations' : pIdx === 1 ? 'View Quality Standards' : 'Discover Onecore')}</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </ScrollReveal>
-
-              {/* Pillar 2 */}
-              <ScrollReveal delay={0.15}>
-                <div className="flex flex-col h-full space-y-4 p-2 border-t border-stone-200 pt-6">
-                  <h3 className="text-2xl font-serif font-medium text-[#121212] tracking-tight">
-                    Dependable Quality
-                  </h3>
-                  <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed flex-1">
-                    Quality is considered across manufacturing, testing, review and release — never treated as a mere final checkpoint.
-                  </p>
-                  <div className="pt-2">
-                    <Link
-                      to="/quality-manufacturing"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-all duration-200 group"
-                    >
-                      <span>View Quality Standards</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
-              </ScrollReveal>
-
-              {/* Pillar 3 */}
-              <ScrollReveal delay={0.2}>
-                <div className="flex flex-col h-full space-y-4 p-2 border-t border-stone-200 pt-6">
-                  <h3 className="text-2xl font-serif font-medium text-[#121212] tracking-tight">
-                    Patient & Doctor Focus
-                  </h3>
-                  <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed flex-1">
-                    Staying close to everyday clinical practice and patients’ daily realities to ensure treatments remain accessible and effective.
-                  </p>
-                  <div className="pt-2">
-                    <Link
-                      to="/about"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-all duration-200 group"
-                    >
-                      <span>Discover Onecore</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
-              </ScrollReveal>
-
+                </ScrollReveal>
+              ))}
             </div>
 
           </div>
@@ -359,7 +353,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
               <ScrollReveal>
                 <h2 className="lilly-serif text-4xl sm:text-6xl lg:text-7xl text-[#121212] tracking-tight leading-tight">
-                  Areas of Care
+                  {areasSec.title || 'Areas of Care'}
                 </h2>
               </ScrollReveal>
 
@@ -454,7 +448,23 @@ export default function Home() {
             <div className="max-w-4xl mx-auto text-center">
               <ScrollReveal>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.1] text-balance">
-                  Improve care through medicines <br className="hidden sm:inline" /><em className="lilly-serif-italic">and healthcare solutions that matter.</em>
+                  {purposeSec.title ? (
+                    purposeSec.title.includes('\n') ? (
+                      <>
+                        {purposeSec.title.split('\n')[0]} <br className="hidden sm:inline" />
+                        <em className="lilly-serif-italic">
+                          {purposeSec.title.split('\n').slice(1).join(' ')}
+                        </em>
+                      </>
+                    ) : (
+                      purposeSec.title
+                    )
+                  ) : (
+                    <>
+                      Improve care through medicines <br className="hidden sm:inline" />
+                      <em className="lilly-serif-italic">and healthcare solutions that matter.</em>
+                    </>
+                  )}
                 </h2>
               </ScrollReveal>
             </div>
@@ -462,32 +472,29 @@ export default function Home() {
             {/* Impact Numbers */}
             <ScrollReveal delay={0.1}>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 border-t border-stone-200">
-                <div className="space-y-2">
-                  <span className="text-5xl sm:text-6xl font-black text-[#121212] tracking-tight block">
-                    60+
-                  </span>
-                  <p className="text-sm font-medium text-[#4B5563]">
-                    Purposeful formulations across core specialties
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <span className="text-5xl sm:text-6xl font-black text-[#121212] tracking-tight block">
-                    9
-                  </span>
-                  <p className="text-sm font-medium text-[#4B5563]">
-                    Specialized therapeutic divisions
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <span className="text-5xl sm:text-6xl font-black text-[#121212] tracking-tight block">
-                    100%
-                  </span>
-                  <p className="text-sm font-medium text-[#4B5563]">
-                    Batch verification and disciplined quality release
-                  </p>
-                </div>
+                {(purposeSec.items && purposeSec.items.length >= 3 ? purposeSec.items : [
+                  {
+                    stat: '60+',
+                    desc: 'Purposeful formulations across core specialties',
+                  },
+                  {
+                    stat: '9',
+                    desc: 'Specialized therapeutic divisions',
+                  },
+                  {
+                    stat: '100%',
+                    desc: 'Batch verification and disciplined quality release',
+                  },
+                ]).map((statItem, sIdx) => (
+                  <div key={statItem.stat || sIdx} className="space-y-2">
+                    <span className="text-5xl sm:text-6xl font-black text-[#121212] tracking-tight block">
+                      {statItem.stat || statItem.num || statItem.title}
+                    </span>
+                    <p className="text-sm font-medium text-[#4B5563]">
+                      {statItem.desc || statItem.description || statItem.subtitle || statItem.text}
+                    </p>
+                  </div>
+                ))}
               </div>
             </ScrollReveal>
 
@@ -497,7 +504,7 @@ export default function Home() {
                 <ScrollReveal delay={0.15}>
                   <div className="relative rounded-3xl overflow-hidden border border-stone-200 shadow-sm aspect-[16/10] bg-[#FAF9F6]">
                     <img
-                      src={assetUrl(aboutSec.image_url || '/assets/internet/healthcare-team-discussion.jpg')}
+                      src={assetUrl(purposeSec.image_url || aboutSec.image_url || '/assets/internet/healthcare-team-discussion.jpg')}
                       alt="Onecore Pharma healthcare professionals and clinical dialogue"
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -513,17 +520,17 @@ export default function Home() {
               <div className="lg:col-span-5 space-y-6">
                 <ScrollReveal delay={0.2}>
                   <h3 className="lilly-serif text-2xl sm:text-4xl text-[#121212] tracking-tight leading-snug">
-                    Connecting Clinical Science with Real Patient Needs
+                    {purposeSec.subheading || 'Connecting Clinical Science with Real Patient Needs'}
                   </h3>
                   <p className="text-base text-[#4B5563] leading-relaxed font-normal">
-                    Onecore Pharma brings together disciplined formulation research, stringent cGMP batch authorization, and compassionate healthcare solutions to serve doctors and patients across India.
+                    {purposeSec.body || 'Onecore Pharma brings together disciplined formulation research, stringent cGMP batch authorization, and compassionate healthcare solutions to serve doctors and patients across India.'}
                   </p>
                   <div className="pt-2">
                     <Link
-                      to="/about"
+                      to={purposeSec.cta_url || '/about'}
                       className="inline-flex items-center gap-2 px-8 py-4 bg-[#121212] hover:bg-[#D52B1E] text-white text-xs font-bold uppercase tracking-wider rounded-full transition-colors shadow-sm"
                     >
-                      <span>Read Our Vision & Story</span>
+                      <span>{purposeSec.cta_text || 'Read Our Vision & Story'}</span>
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -556,7 +563,7 @@ export default function Home() {
             <div className="max-w-3xl space-y-8">
               <ScrollReveal>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight text-balance">
-                  Quality is part of the product <br className="hidden sm:inline" />from the beginning.
+                  {qualitySec.title || qualitySec.heading || 'Quality is part of the product from the beginning.'}
                 </h2>
               </ScrollReveal>
 
@@ -572,6 +579,19 @@ export default function Home() {
                   )}
                 </div>
               </ScrollReveal>
+
+              {qualitySec.items && qualitySec.items.length > 0 && (
+                <ScrollReveal delay={0.12}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    {qualitySec.items.map((qItem, qIdx) => (
+                      <div key={qItem.title || qIdx} className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 space-y-1">
+                        <h4 className="text-base font-serif font-bold text-white">{qItem.title}</h4>
+                        <p className="text-xs text-stone-200 leading-relaxed">{qItem.desc || qItem.description || qItem.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollReveal>
+              )}
 
               <ScrollReveal delay={0.15}>
                 <div className="pt-2">
@@ -721,7 +741,20 @@ export default function Home() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <ScrollReveal>
               <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight text-balance">
-                Purposeful healthcare, <br className="hidden sm:inline" />across every area we serve.
+                {finalCtaSec.title ? (
+                  finalCtaSec.title.includes('\n') ? (
+                    <>
+                      {finalCtaSec.title.split('\n')[0]} <br className="hidden sm:inline" />
+                      {finalCtaSec.title.split('\n').slice(1).join(' ')}
+                    </>
+                  ) : (
+                    finalCtaSec.title
+                  )
+                ) : (
+                  <>
+                    Purposeful healthcare, <br className="hidden sm:inline" />across every area we serve.
+                  </>
+                )}
               </h2>
             </ScrollReveal>
 

@@ -42,25 +42,37 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
   };
 
   const handleAddItem = () => {
-    const newItem = {
-      title: 'New Card / Item',
-      desc: '',
-      description: '',
-      eyebrow: '',
-      stat: '',
-      num: String(itemList.length + 1).padStart(2, '0'),
-      cta_text: '',
-      cta_url: '',
-      image: '',
-    };
-    const updated = [...itemList, newItem];
-    updateItems(updated);
-    setEditingItemIdx(updated.length - 1);
+    setItemList((prev) => {
+      const current = prev || [];
+      const newItem = {
+        title: 'New Card / Item',
+        heading: 'New Card / Item',
+        desc: '',
+        description: '',
+        text: '',
+        body: '',
+        eyebrow: '',
+        stat: '',
+        num: String(current.length + 1).padStart(2, '0'),
+        cta_text: '',
+        cta_url: '',
+        image: '',
+        image_url: '',
+      };
+      const updated = [...current, newItem];
+      onChange(updated);
+      setEditingItemIdx(updated.length - 1);
+      return updated;
+    });
   };
 
   const handleRemoveItem = (index) => {
-    const updated = itemList.filter((_, i) => i !== index);
-    updateItems(updated);
+    setItemList((prev) => {
+      const current = prev || [];
+      const updated = current.filter((_, i) => i !== index);
+      onChange(updated);
+      return updated;
+    });
     if (editingItemIdx === index) setEditingItemIdx(null);
     else if (editingItemIdx > index) setEditingItemIdx(editingItemIdx - 1);
   };
@@ -68,19 +80,32 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
   const handleMoveItem = (index, direction) => {
     const swapIndex = direction === 'up' ? index - 1 : index + 1;
     if (swapIndex < 0 || swapIndex >= itemList.length) return;
-    const updated = [...itemList];
-    [updated[index], updated[swapIndex]] = [updated[swapIndex], updated[index]];
-    updateItems(updated);
+    setItemList((prev) => {
+      const current = prev || [];
+      if (swapIndex < 0 || swapIndex >= current.length) return current;
+      const updated = [...current];
+      [updated[index], updated[swapIndex]] = [updated[swapIndex], updated[index]];
+      onChange(updated);
+      return updated;
+    });
     if (editingItemIdx === index) setEditingItemIdx(swapIndex);
     else if (editingItemIdx === swapIndex) setEditingItemIdx(index);
   };
 
-  const handleFieldChange = (index, field, value) => {
-    const updated = itemList.map((item, i) => {
-      if (i !== index) return item;
-      return { ...item, [field]: value };
+  const handleFieldsChange = (index, fieldsObj) => {
+    setItemList((prev) => {
+      const current = prev || [];
+      const updated = current.map((item, i) => {
+        if (i !== index) return item;
+        return { ...item, ...fieldsObj };
+      });
+      onChange(updated);
+      return updated;
     });
-    updateItems(updated);
+  };
+
+  const handleFieldChange = (index, field, value) => {
+    handleFieldsChange(index, { [field]: value });
   };
 
   return (
@@ -193,8 +218,12 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
                           type="text"
                           value={item.title || item.heading || item.name || ''}
                           onChange={(e) => {
-                            handleFieldChange(idx, 'title', e.target.value);
-                            if (item.heading) handleFieldChange(idx, 'heading', e.target.value);
+                            const val = e.target.value;
+                            handleFieldsChange(idx, {
+                              title: val,
+                              heading: val,
+                              name: val,
+                            });
                           }}
                           placeholder="e.g. Consistent Standards"
                           className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
@@ -210,10 +239,14 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
                           type="text"
                           value={item.eyebrow || item.stat || item.num || item.channel || item.stage || ''}
                           onChange={(e) => {
-                            handleFieldChange(idx, 'eyebrow', e.target.value);
-                            if (item.stat !== undefined) handleFieldChange(idx, 'stat', e.target.value);
-                            if (item.num !== undefined) handleFieldChange(idx, 'num', e.target.value);
-                            if (item.channel !== undefined) handleFieldChange(idx, 'channel', e.target.value);
+                            const val = e.target.value;
+                            handleFieldsChange(idx, {
+                              eyebrow: val,
+                              stat: val,
+                              num: val,
+                              channel: val,
+                              stage: val,
+                            });
                           }}
                           placeholder="e.g. 01, 60+, FOUNDATIONAL QUALITY"
                           className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
@@ -229,9 +262,13 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
                           rows={2}
                           value={item.desc || item.description || item.text || item.body || ''}
                           onChange={(e) => {
-                            handleFieldChange(idx, 'desc', e.target.value);
-                            handleFieldChange(idx, 'description', e.target.value);
-                            handleFieldChange(idx, 'text', e.target.value);
+                            const val = e.target.value;
+                            handleFieldsChange(idx, {
+                              desc: val,
+                              description: val,
+                              text: val,
+                              body: val,
+                            });
                           }}
                           placeholder="Item descriptive copy..."
                           className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75] resize-y"
@@ -248,8 +285,11 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
                             type="text"
                             value={item.detail || item.footer || ''}
                             onChange={(e) => {
-                              if (item.detail !== undefined) handleFieldChange(idx, 'detail', e.target.value);
-                              if (item.footer !== undefined) handleFieldChange(idx, 'footer', e.target.value);
+                              const val = e.target.value;
+                              handleFieldsChange(idx, {
+                                detail: val,
+                                footer: val,
+                              });
                             }}
                             placeholder="Additional nuance or badge text"
                             className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
@@ -264,8 +304,15 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
                         </label>
                         <input
                           type="text"
-                          value={item.cta_text || ''}
-                          onChange={(e) => handleFieldChange(idx, 'cta_text', e.target.value)}
+                          value={item.cta_text || item.label || item.btn_text || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            handleFieldsChange(idx, {
+                              cta_text: val,
+                              label: val,
+                              btn_text: val,
+                            });
+                          }}
                           placeholder="e.g. Learn More"
                           className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
                         />
@@ -276,10 +323,15 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
                         </label>
                         <input
                           type="text"
-                          value={item.cta_url || item.value || ''}
+                          value={item.cta_url || item.value || item.url || item.link || ''}
                           onChange={(e) => {
-                            handleFieldChange(idx, 'cta_url', e.target.value);
-                            if (item.value !== undefined) handleFieldChange(idx, 'value', e.target.value);
+                            const val = e.target.value;
+                            handleFieldsChange(idx, {
+                              cta_url: val,
+                              value: val,
+                              url: val,
+                              link: val,
+                            });
                           }}
                           placeholder="/page or #target or mailto:..."
                           className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
@@ -296,8 +348,11 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
                             type="text"
                             value={item.image || item.image_url || ''}
                             onChange={(e) => {
-                              handleFieldChange(idx, 'image', e.target.value);
-                              handleFieldChange(idx, 'image_url', e.target.value);
+                              const val = e.target.value;
+                              handleFieldsChange(idx, {
+                                image: val,
+                                image_url: val,
+                              });
                             }}
                             placeholder="/assets/image.jpg"
                             className="flex-1 bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
@@ -306,8 +361,10 @@ function SectionItemsManager({ items, onChange, onOpenMedia }) {
                             type="button"
                             onClick={() =>
                               onOpenMedia((url) => {
-                                handleFieldChange(idx, 'image', url);
-                                handleFieldChange(idx, 'image_url', url);
+                                handleFieldsChange(idx, {
+                                  image: url,
+                                  image_url: url,
+                                });
                               })
                             }
                             className="shrink-0 flex items-center gap-1 px-3 py-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-lg text-xs text-slate-700 font-medium transition-all"

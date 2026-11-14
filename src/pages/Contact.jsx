@@ -336,8 +336,21 @@ export default function Contact() {
           <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
             <ScrollReveal>
               <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
-                {heroSec.title && heroSec.title !== 'Contact' ? heroSec.title : 'Get in Touch with Onecore Pharma'} <br />
-                <span className="italic font-normal text-[#D52B1E]">Direct dialogue, dedicated care.</span>
+                {heroSec.title && heroSec.title !== 'Contact' ? (
+                  heroSec.title.includes('\n') ? (
+                    <>
+                      {heroSec.title.split('\n')[0]} <br />
+                      <span className="italic font-normal text-[#D52B1E]">{heroSec.title.split('\n').slice(1).join(' ')}</span>
+                    </>
+                  ) : (
+                    heroSec.title
+                  )
+                ) : (
+                  <>
+                    Get in Touch with Onecore Pharma <br />
+                    <span className="italic font-normal text-[#D52B1E]">Direct dialogue, dedicated care.</span>
+                  </>
+                )}
               </h1>
             </ScrollReveal>
 
@@ -572,7 +585,7 @@ export default function Contact() {
             <ScrollReveal delay={0.08}>
               <div className="relative rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] sm:aspect-[21/9] bg-stone-100">
                 <img
-                  src={assetUrl('/assets/internet/contact-medical-liaison.jpg')}
+                  src={assetUrl(formIntroSec.image_url || '/assets/internet/contact-medical-liaison.jpg')}
                   alt="Onecore Pharma medical affairs and commercial liaison team"
                   className="w-full h-full object-cover"
                   loading="lazy"

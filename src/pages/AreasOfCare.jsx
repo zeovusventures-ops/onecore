@@ -21,7 +21,15 @@ export default function AreasOfCare() {
   const { areas: dynamicAreas, loading: areasLoading } = useTherapeuticAreas();
   const areasList = dynamicAreas || [];
   const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('areas-of-care');
-  const heroSection = getSection('hero');
+  const heroSection = getSection('hero', {
+    title: 'Our medicines & areas of care.',
+    body: 'Explore Onecore’s 9 specialized therapeutic divisions and over 60 clinically engineered prescription medicines, supportive therapies, and micronutrient formulations.',
+  });
+  const dossierSection = getSection('dossier_inquiry') || getSection('institutional_access', {
+    eyebrow: 'INSTITUTIONAL ACCESS',
+    title: 'Request Full Product Portfolio & Monographs',
+    body: 'For registered medical practitioners, hospital formularies, and institutional procurement partners requiring prescribing dossiers, bioequivalence data, or commercial rate cards.',
+  });
 
   // Local search input
   const [searchQuery, setSearchQuery] = useState(urlQuery);
@@ -190,11 +198,24 @@ export default function AreasOfCare() {
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
             <div className="max-w-3xl space-y-4">
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
-                Our medicines & <br />
-                <span className="italic font-normal text-[#D52B1E]">areas of care.</span>
+                {heroSection?.title ? (
+                  heroSection.title.includes('\n') ? (
+                    <>
+                      {heroSection.title.split('\n')[0]} <br />
+                      <span className="italic font-normal text-[#D52B1E]">{heroSection.title.split('\n').slice(1).join(' ')}</span>
+                    </>
+                  ) : (
+                    heroSection.title
+                  )
+                ) : (
+                  <>
+                    Our medicines & <br />
+                    <span className="italic font-normal text-[#D52B1E]">areas of care.</span>
+                  </>
+                )}
               </h1>
               <p className="text-base sm:text-xl text-[#555555] font-light leading-relaxed max-w-2xl font-sans">
-                Explore Onecore’s 9 specialized therapeutic divisions and over 60 clinically engineered prescription medicines, supportive therapies, and micronutrient formulations.
+                {heroSection?.body || 'Explore Onecore’s 9 specialized therapeutic divisions and over 60 clinically engineered prescription medicines, supportive therapies, and micronutrient formulations.'}
               </p>
             </div>
 
@@ -504,13 +525,26 @@ export default function AreasOfCare() {
           
           <div className="text-center space-y-3">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-              INSTITUTIONAL ACCESS
+              {dossierSection?.eyebrow || 'INSTITUTIONAL ACCESS'}
             </span>
             <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight text-balance">
-              Request Full Product Portfolio <br className="hidden sm:inline" />&amp; Monographs
+              {dossierSection?.title ? (
+                dossierSection.title.includes('\n') ? (
+                  <>
+                    {dossierSection.title.split('\n')[0]} <br className="hidden sm:inline" />
+                    {dossierSection.title.split('\n').slice(1).join(' ')}
+                  </>
+                ) : (
+                  dossierSection.title
+                )
+              ) : (
+                <>
+                  Request Full Product Portfolio <br className="hidden sm:inline" />&amp; Monographs
+                </>
+              )}
             </h2>
             <p className="text-sm sm:text-base text-[#555555] font-light leading-relaxed font-sans max-w-2xl mx-auto">
-              For registered medical practitioners, hospital formularies, and institutional procurement partners requiring prescribing dossiers, bioequivalence data, or commercial rate cards.
+              {dossierSection?.body || 'For registered medical practitioners, hospital formularies, and institutional procurement partners requiring prescribing dossiers, bioequivalence data, or commercial rate cards.'}
             </p>
           </div>
 

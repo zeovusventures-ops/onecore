@@ -251,8 +251,21 @@ export default function PatientsCaregivers() {
         <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
           <ScrollReveal>
             <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
-              Patients & Caregivers. <br />
-              <span className="italic font-normal text-[#D52B1E]">Partners in healthcare.</span>
+              {heroSec.title ? (
+                heroSec.title.includes('\n') ? (
+                  <>
+                    {heroSec.title.split('\n')[0]} <br />
+                    <span className="italic font-normal text-[#D52B1E]">{heroSec.title.split('\n').slice(1).join(' ')}</span>
+                  </>
+                ) : (
+                  heroSec.title
+                )
+              ) : (
+                <>
+                  Patients & Caregivers. <br />
+                  <span className="italic font-normal text-[#D52B1E]">Partners in healthcare.</span>
+                </>
+              )}
             </h1>
           </ScrollReveal>
 
@@ -304,8 +317,21 @@ export default function PatientsCaregivers() {
             <div className="lg:col-span-6 space-y-6">
               <ScrollReveal>
                 <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
-                  Different experiences. <br />
-                  <span className="italic font-normal text-[#D52B1E]">The same goal.</span>
+                  {perspectivesSec.title ? (
+                    perspectivesSec.title.includes('\n') ? (
+                      <>
+                        {perspectivesSec.title.split('\n')[0]} <br />
+                        <span className="italic font-normal text-[#D52B1E]">{perspectivesSec.title.split('\n').slice(1).join(' ')}</span>
+                      </>
+                    ) : (
+                      perspectivesSec.title
+                    )
+                  ) : (
+                    <>
+                      Different experiences. <br />
+                      <span className="italic font-normal text-[#D52B1E]">The same goal.</span>
+                    </>
+                  )}
                 </h2>
               </ScrollReveal>
 
@@ -347,7 +373,7 @@ export default function PatientsCaregivers() {
             <div className="max-w-3xl">
               <ScrollReveal>
                 <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
-                  Listen carefully. Support responsibly. Keep the person behind the medicine in view.
+                  {roleSec.title || 'Listen carefully. Support responsibly. Keep the person behind the medicine in view.'}
                 </h2>
               </ScrollReveal>
             </div>
@@ -388,10 +414,10 @@ export default function PatientsCaregivers() {
           <div className="max-w-3xl space-y-4">
             <ScrollReveal>
               <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
-                You should be able to understand the medicines that are part of your care.
+                {forPatientsSec.title || 'You should be able to understand the medicines that are part of your care.'}
               </h2>
               <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-3">
-                Clear information helps patients and caregivers take a more informed role in the treatment journey. Onecore provides factual information about its products and encourages patients to speak with their doctor or pharmacist.
+                {forPatientsSec.body || 'Clear information helps patients and caregivers take a more informed role in the treatment journey. Onecore provides factual information about its products and encourages patients to speak with their doctor or pharmacist.'}
               </p>
             </ScrollReveal>
           </div>
@@ -464,7 +490,7 @@ export default function PatientsCaregivers() {
               <div className="lg:col-span-7 space-y-6">
                 <ScrollReveal>
                   <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight">
-                    Supporting clinical practice with clear product information.
+                    {forProfessionalsSec.title || 'Supporting clinical practice with clear product information.'}
                   </h2>
                 </ScrollReveal>
 
@@ -560,14 +586,27 @@ export default function PatientsCaregivers() {
           <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
             <ScrollReveal>
               <h2 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
-                A prescription begins in the clinic. <br />
-                <span className="italic font-normal text-[#D52B1E]">Care continues beyond it.</span>
+                {treatmentJourneySec.title ? (
+                  treatmentJourneySec.title.includes('\n') ? (
+                    <>
+                      {treatmentJourneySec.title.split('\n')[0]} <br />
+                      <span className="italic font-normal text-[#D52B1E]">{treatmentJourneySec.title.split('\n').slice(1).join(' ')}</span>
+                    </>
+                  ) : (
+                    treatmentJourneySec.title
+                  )
+                ) : (
+                  <>
+                    A prescription begins in the clinic. <br />
+                    <span className="italic font-normal text-[#D52B1E]">Care continues beyond it.</span>
+                  </>
+                )}
               </h2>
             </ScrollReveal>
 
             <ScrollReveal delay={0.08}>
               <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-light leading-relaxed font-sans max-w-3xl">
-                Healthcare professionals make treatment decisions in the clinical setting. Patients then carry those decisions into everyday life. A responsible pharmaceutical company should support both parts of that journey.
+                {treatmentJourneySec.body || 'Healthcare professionals make treatment decisions in the clinical setting. Patients then carry those decisions into everyday life. A responsible pharmaceutical company should support both parts of that journey.'}
               </p>
             </ScrollReveal>
 
@@ -605,7 +644,7 @@ export default function PatientsCaregivers() {
             <div className="max-w-3xl">
               <ScrollReveal>
                 <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
-                  Safety information deserves a clear way to reach us.
+                  {safetySec.title || 'Safety information deserves a clear way to reach us.'}
                 </h2>
                 <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-3">
                   {safetySec.body}
